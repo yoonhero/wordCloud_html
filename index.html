@@ -1,0 +1,79 @@
+<html>
+
+<head>
+    <title>하루하루의 다짐</title>
+    <script src="https://cdn.anychart.com/releases/v8/js/anychart-base.min.js"></script>
+    <script src="https://cdn.anychart.com/releases/v8/js/anychart-tag-cloud.min.js"></script>
+    <style>
+        body {
+            background-image: linear-gradient(120deg, #a1c4fd 0%, #c2e9fb 100%);
+        }
+        
+        body {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+        
+        .input_container {
+            z-index: 10;
+            position: absolute;
+            left: 50%;
+            transform: translate(-50%);
+            bottom: 0;
+        }
+    </style>
+</head>
+
+<body>
+    <div>
+        <div class="input_container">
+            <input type="text" id="text" />
+            <input type="submit" id="submit" />
+
+        </div>
+        <div id="container"></div>
+    </div>
+
+    <script>
+        var data = [];
+        draw(data)
+            // code to create a word cloud chart will be here
+        document.getElementById("submit").addEventListener("click", () => {
+            var date = new Date();
+            var year = date.getFullYear();
+            var month = ("0" + (1 + date.getMonth())).slice(-2);
+            var day = ("0" + date.getDate()).slice(-2);
+
+            data.push({
+                "x": document.getElementById("text").value,
+                "value": Math.random(),
+                "date": year + "/" + month + "/" + day
+            })
+            document.getElementById("container").innerHTML = ""
+            document.getElementById("text").value = ""
+            draw(data)
+            console.log(data)
+        });
+
+        function draw(data) {
+            var chart = anychart.tagCloud(data);
+            // set a chart title
+            chart.title('하루하루의 다짐들')
+            chart.mode("spiral");
+            chart.tooltip().format("\n{%date}");
+            // set an array of angles at which the words will be laid out
+            chart.angles([-90, 0, 90]);
+            // enable a color range
+            //chart.colorRange(true);
+            // set the color range length
+            chart.colorRange().length('80%');
+            // display the word cloud chart
+            chart.container("container");
+            chart.draw();
+        }
+    </script>
+</body>
+
+</html>
